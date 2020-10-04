@@ -4,6 +4,7 @@ class MammalsSet:
         The mammals set object needs access to an object of the type animals.animal_db.Animals
         class. This is given as input when the mammals set is initialized.
         """
+        self.mammals = []
         self.animals_db = animals_db
 
     def refresh(self):
