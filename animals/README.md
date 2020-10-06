@@ -1,4 +1,29 @@
 # Animals TDD Tutorial
+Imagine a hypothetical problem where we want to create an application that can easily print a list
+of all different species of mammals that we have stored in a database. In essence we want to
+create a class that we can use as some kind of cache. We call this class `MammalsSet`. In our
+database we have a lot of data about many different animals. The database contain individuals, i.e.,
+there can be many animals of the same species. The client can be used to add new animals to the
+database and the idea is that we can send a message to the `MammalsSet` to refresh its list over
+different mammals species. If we send a message to the `MammalsSet` to retrieve all mammals
+we will get a list that contains all different species of mammals. Below is an overview picture
+of the relation between the different classes.
+
+![Diagram](images/animals_initial.png)
+
+## Scope
+In this tutorial we will experiment with Test Driven Development (TDD) and see if it can be used
+to help the design process. The implementation will be done in Python using the builtin unittest
+framework and mocking support. The idea is to address the problem is a strict TDD fashion which
+that we will not write a single line of code if we don't have a test for it. We will use the
+*Red-Green-Refactor* idea to improve the code. Each test case shall be small, following the
+*Arrange, Act, Assert* pattern.
+
+During the process, the scope of the application will be changed. We will add new requirements,
+change some ideas, refactor the code, etc. The diagram above shall be seen as starting point and
+a base for our work. The diagram will be updated to follow the development. 
+
+Let's jump right into it with a first test.
 
 ## First Test
 * Create a unittest file `test_mammals.py`
