@@ -1,4 +1,4 @@
-# Animals TDD Tutorial
+# TDD as a Design Tool
 Imagine a hypothetical problem where we want to create an application that can easily print a list
 of all different species of mammals that we have stored in a database. In essence we want to
 create a class that we can use as some kind of cache. We call this class `MammalsSet`. In our
@@ -12,7 +12,7 @@ of the relation between the different classes.
 ![Diagram](images/animals_initial.png)
 
 ## Scope
-In this tutorial we will experiment with Test Driven Development (TDD) and see if it can be used
+In this text we will experiment with Test Driven Development (TDD) and see if it can be used
 to help the design process. The implementation will be done in Python using the builtin unittest
 framework and mocking support. The idea is to address the problem is a strict TDD fashion which
 that we will not write a single line of code if we don't have a test for it. We will use the
