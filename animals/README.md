@@ -9,7 +9,7 @@ different mammals species. If we send a message to the `MammalsSet` to retrieve 
 we will get a list that contains all different species of mammals. Below is an overview picture
 of the relation between the different classes.
 
-![Diagram](images/animals_initial.png)
+![Diagram](images/animals_initial.svg)
 
 ## Scope
 In this text we will experiment with Test Driven Development (TDD) and see if it can be used
