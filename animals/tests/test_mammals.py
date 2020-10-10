@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import Mock
+from unittest.mock import Mock, call
 from animals.animals.mammals import MammalsSet
 
 
@@ -27,6 +27,17 @@ class TestMammalsSet(unittest.TestCase):
         mammals_set = MammalsSet(db)
         mammals_set.refresh()
         self.assertEqual(1, len(mammals_set.mammals))
+
+    def test_only_add_mammals_to_the_mammals_set(self):
+        db = Mock()
+        horse = Mock()
+        trout = Mock()
+        db.animals.return_value = [horse, trout]
+        mammals_set = MammalsSet(db)
+        mammals_set.refresh()
+        db.assert_has_calls([call.animals()])
+        horse.is_mammal.assert_called_once()
+        trout.is_mammal.assert_called_once()
 
 
 if __name__ == "__main__":

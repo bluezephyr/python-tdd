@@ -135,3 +135,17 @@ If we now run the tests again, we see that the test will pass. Unfortunately, ou
 now fails. This is due to that the mock that we provided earlier on does not support the new actions
 that we now do in the `refresh` method. By adding an empty list as the return value of the `animals`
 call, the test will pass.
+
+## Test Four
+In the previous test we showed that animals in the database are fetched to the `MammalsSet` when
+we send the `refresh` message. At least this is true if there is one animal in the database. What we
+didn't check, though, was if the retrieved animal was in fact a mammal. We need to add that check.
+The question is how to do that. Who owns that information? We have decided that the returned
+information from the `refresh` call is a list of animal objects. We could add `is_mammal` method to
+that object and use that to check if we shall add the animal to the list of mammals in the
+`MammalsSet`.
+
+How would we write a test for that? We start by creating a new test case called
+`test_only_add_mammals_to_the_mammals_set`. In this test we want to add two animals to the database.
+One that is a mammal and one that isn't.
+
