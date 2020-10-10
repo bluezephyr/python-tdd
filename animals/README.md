@@ -94,7 +94,7 @@ The second test case is now complete and we have a working implementation that f
 design decisions on the way and we have documented them in working code. Let's head for the next
 test.
 
-## Third Test
+## Adding Mammals - First Try
 It is now time to actually add something to the `MammalsSet `. Since we do that by responding to
 the request message sent to the database, we need to control the response to the command that we
 sent in the previous test. The Mocks can easily be changed to do that. but the question is what to
@@ -108,32 +108,30 @@ make that animal a mammal. If we represent the return value from the `animals` m
 of objects of an `Animal` class, we could create a new test case that would open up for the next
 step. Let's do that.
 
-Create a new test case called `test_return_list_with_one_item_if_database_contains_one_mammal`.
-* Create an instance `MammalsSet` instance with a mock as an argument.
+### Third Test
+Create a new test case called `test_add_mammal_to_mammals_set_at_refresh`. We want to extend the
+mock from our previous test case by adding a return value to the `animals` method. We need to
+create a new mock that can represent the mammal that we want to return.
+* Create an instance of a mock called `horse` that we can interpret as a mammal. Right now we don't
+  add any attributes or methods to for this since it is not needed right now. When the
+  implementation progress, we might need to be more specific, but we keep it simple for now and
+  just create a Mock object that we can put in the list of animals in the mock database.
+* Create a mock database. Configure the mock to return a list of one item (the horse mock) when
+  the animals method is called.
+* Create an instance `MammalsSet` instance with the database mock as the argument.
 * Call the `refresh` method on the `MammalsSet` instance.
 * Check that the length of the `mammals` attribute on the `MammalsSet` instance is 1.
 * Run the test and watch it fail.
 
-We now need to take control of the database mock to return a list containing one mammal. One way of
-doing that is to create a new class that inherits the Mock class. We can then add our own methods
-and attributes to this class to control its behavior.
-
-* Create a new class called `DatabaseMock`. Add a method to the mock called `animals`. Let the
-  method return a list that contains an object that we can interpret an a mammal. When the
-  implementation progress, we might need to be more specific, but we keep it simple for now and
-  just create a Mock object that we put in the list.
-* Create an instance of the `DatabaseMock` class in the test case and use this instance as
-  argument to the mammals_set.
-* The test case is now ready and running it shows that it fails.
-
 We can now turn to the implementation. The idea is to update the refresh method on the `MammalsSet`
 class to store the returned list of animals in the `mammals` list. We actually don't care right
-now whether the returned animal is actually a mammal. We will need to elaborate on this soon.
+now whether the returned animal is actually a mammal. We will elaborate on that in the next test
+case.
 
 * To implement the refresh method, we iterate over the list of all items returned by the call to
   the `animals` method on the database instance and add those items to the mammals list.
 
 If we now run the tests again, we see that the test will pass. Unfortunately, our second test
 now fails. This is due to that the mock that we provided earlier on does not support the new actions
-that we now do in the `refresh` method. The test case helped us in the earlier steps of the design,
-but now it is no longer needed. Let's remove it.
+that we now do in the `refresh` method. By adding an empty list as the return value of the `animals`
+call, the test will pass.
