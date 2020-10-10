@@ -14,9 +14,9 @@ of the relation between the different classes.
 ## Scope
 In this text we will experiment with Test Driven Development (TDD) and see if it can be used
 to help the design process. The implementation will be done in Python using the builtin unittest
-framework and mocking support. The idea is to address the problem is a strict TDD fashion which
-that we will not write a single line of code if we don't have a test for it. We will use the
-*Red-Green-Refactor* idea to improve the code. Each test case shall be small, following the
+framework and mocking support. The idea is to address the problem in a TDD fashion which means
+that we will not write a single line of code if we don't have a failing test for it. We will use
+the *Red-Green-Refactor* idea to improve the code. Each test case shall be small, following the
 *Arrange, Act, Assert* pattern.
 
 During the process, the scope of the application will be changed. We will add new requirements,
@@ -46,7 +46,7 @@ Let's jump right into it with a first test.
   don't know now if that is the best way to implement it. So let's wait with that. Run the test,
   it shall now work.
 
-The first part of the implementation is now finished. Commit.
+The first part of the implementation is now finished.
 
 ## Second Test
 With the first test case done, what would be a good next step? A natural thing would be to add
@@ -93,3 +93,47 @@ The second test case is now complete and we have a working implementation that f
 (!) the tests in our suite. Maybe not very impressive at the moment but we have made a few important
 design decisions on the way and we have documented them in working code. Let's head for the next
 test.
+
+## Third Test
+It is now time to actually add something to the `MammalsSet `. Since we do that by responding to
+the request message sent to the database, we need to control the response to the command that we
+sent in the previous test. The Mocks can easily be changed to do that. but the question is what to
+return. The easiest is probably to return a list of all the animals in the database. And the
+simplest test would be to have an empty database and return an empty list. The problem with such a
+test, though, is that it would not fail and it would not trigger us to write any new production
+code. It seems that we need to make some more design decisions before we can continue. If we decide
+how to represent the animals in the list that is returned from the database we would be able to
+have one animal in the database. To make that animal also part of the `MammalsSet`, we need also to
+make that animal a mammal. If we represent the return value from the `animals` method call as a list
+of objects of an `Animal` class, we could create a new test case that would open up for the next
+step. Let's do that.
+
+Create a new test case called `test_return_list_with_one_item_if_database_contains_one_mammal`.
+* Create an instance `MammalsSet` instance with a mock as an argument.
+* Call the `refresh` method on the `MammalsSet` instance.
+* Check that the length of the `mammals` attribute on the `MammalsSet` instance is 1.
+* Run the test and watch it fail.
+
+We now need to take control of the database mock to return a list containing one mammal. One way of
+doing that is to create a new class that inherits the Mock class. We can then add our own methods
+and attributes to this class to control its behavior.
+
+* Create a new class called `DatabaseMock`. Add a method to the mock called `animals`. Let the
+  method return a list that contains an object that we can interpret an a mammal. When the
+  implementation progress, we might need to be more specific, but we keep it simple for now and
+  just create a Mock object that we put in the list.
+* Create an instance of the `DatabaseMock` class in the test case and use this instance as
+  argument to the mammals_set.
+* The test case is now ready and running it shows that it fails.
+
+We can now turn to the implementation. The idea is to update the refresh method on the `MammalsSet`
+class to store the returned list of animals in the `mammals` list. We actually don't care right
+now whether the returned animal is actually a mammal. We will need to elaborate on this soon.
+
+* To implement the refresh method, we iterate over the list of all items returned by the call to
+  the `animals` method on the database instance and add those items to the mammals list.
+
+If we now run the tests again, we see that the test will pass. Unfortunately, our second test
+now fails. This is due to that the mock that we provided earlier on does not support the new actions
+that we now do in the `refresh` method. The test case helped us in the earlier steps of the design,
+but now it is no longer needed. Let's remove it.

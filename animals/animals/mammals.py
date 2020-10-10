@@ -11,4 +11,5 @@ class MammalsSet:
         """
         Request the database to refresh the set of mammals.
         """
-        self.animals_db.animals()
+        for animal in self.animals_db.animals():
+            self.mammals.append(animal)
