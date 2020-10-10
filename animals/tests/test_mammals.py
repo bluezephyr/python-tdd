@@ -3,18 +3,11 @@ from unittest.mock import Mock
 from animals.animals.mammals import MammalsSet
 
 
-class DatabaseMock(Mock):
-    @staticmethod
-    def animals():
-        return [Mock()]
-
-
 class TestMammalsSet(unittest.TestCase):
     def test_return_empty_list_if_no_mammals(self):
         """Test 1"""
         self.assertEqual(0, len(MammalsSet(None).mammals))
 
-    @unittest.skip
     def test_refresh_generates_call_to_database(self):
         """
         Test 2
@@ -22,12 +15,16 @@ class TestMammalsSet(unittest.TestCase):
         when the refresh message is sent.
         """
         db = Mock()
+        db.animals.return_value = []
         MammalsSet(db).refresh()
         db.animals.assert_called()
 
-    def test_return_list_with_one_item_if_database_contains_one_mammal(self):
+    def test_add_mammal_to_mammals_set_at_refresh(self):
         """Test 3"""
-        mammals_set = MammalsSet(DatabaseMock())
+        horse = Mock()
+        db = Mock()
+        db.animals.return_value = [horse]
+        mammals_set = MammalsSet(db)
         mammals_set.refresh()
         self.assertEqual(1, len(mammals_set.mammals))
 
